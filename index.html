@@ -1,0 +1,1282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HYTAYN — Cyber Security Engineering</title>
+    
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Three.js for background -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <style>
+    :root {
+        --bg: #020617;
+        --bg-dark: #010813;
+        --accent: #5fb3d9;
+        --accent-light: #8bd1f5;
+        --accent-glow: rgba(95, 179, 217, 0.4);
+        --text: #e5e7eb;
+        --text-light: rgba(229, 231, 235, 0.9);
+        --muted: rgba(255, 255, 255, 0.65);
+        --card-bg: rgba(17, 24, 39, 0.45);
+        --border: rgba(255, 255, 255, 0.08);
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    html {
+        scroll-behavior: smooth;
+    }
+
+    body {
+        background: var(--bg);
+        color: var(--text);
+        font-family: 'Inter', sans-serif;
+        overflow-x: hidden;
+        line-height: 1.6;
+    }
+
+    /* ================= BACKGROUND ================= */
+    #three-bg {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -20;
+        pointer-events: none;
+    }
+
+    #overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: 
+            radial-gradient(circle at 20% 30%, rgba(95, 179, 217, .08) 0%, transparent 40%),
+            radial-gradient(circle at 80% 70%, rgba(95, 179, 217, .06) 0%, transparent 40%),
+            radial-gradient(circle at 50% 20%, rgba(95, 179, 217, .12), transparent 55%),
+            linear-gradient(to bottom, rgba(2, 6, 23, 0.6), rgba(2, 6, 23, 0.98) 70%);
+        z-index: -10;
+    }
+
+    /* ================= NAV ================= */
+    /* TOP-LEFT: COMPANY NAME WITH LOGO - SMALLER SIZE */
+    .top-left-container {
+        position: fixed;
+        top: 25px;
+        left: 35px;
+        z-index: 9999;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    .top-left-container.scrolled {
+        top: 18px;
+        left: 25px;
+    }
+
+    .company-name {
+        font-family: 'Orbitron', sans-serif;
+        font-size: 22px; /* SMALLER - was 28px */
+        font-weight: 600;
+        letter-spacing: 1px;
+        color: var(--accent);
+        text-shadow: 0 0 12px rgba(95, 179, 217, 0.4);
+        transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    .top-left-container.scrolled .company-name {
+        font-size: 18px; /* SMALLER - was 20px */
+        opacity: 0.9;
+    }
+
+    .big-logo {
+        width: 90px; /* MUCH SMALLER - was 180px */
+        height: 90px; /* MUCH SMALLER - was 180px */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    .top-left-container.scrolled .big-logo {
+        width: 50px; /* SMALLER - was 60px */
+        height: 50px; /* SMALLER - was 60px */
+    }
+
+    .big-logo img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        filter: 
+            drop-shadow(0 0 10px rgba(95, 179, 217, 0.6))
+            brightness(1.2);
+        transition: all 0.4s ease;
+    }
+
+    .big-logo:hover img {
+        transform: scale(1.05);
+        filter: 
+            drop-shadow(0 0 18px rgba(95, 179, 217, 0.8))
+            brightness(1.3);
+    }
+
+    /* NAVIGATION - RIGHT SIDE - SMALLER */
+    .top-nav {
+        position: fixed;
+        top: 25px;
+        right: 35px;
+        z-index: 9999;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        background: rgba(2, 6, 23, 0.8);
+        backdrop-filter: blur(15px);
+        padding: 10px 20px;
+        border-radius: 20px;
+        border: 1px solid var(--border);
+        transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    .top-nav.scrolled {
+        top: 18px;
+        right: 25px;
+        padding: 6px 15px;
+        border-radius: 18px;
+        background: rgba(2, 6, 23, 0.95);
+    }
+
+    .top-nav a {
+        font-size: 12px; /* SMALLER - was 13px */
+        letter-spacing: 1.2px; /* SMALLER - was 1.5px */
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.8);
+        text-decoration: none;
+        transition: all 0.3s ease;
+        position: relative;
+        padding: 4px 0;
+        font-weight: 500;
+    }
+
+    .top-nav a:hover {
+        color: var(--accent);
+    }
+
+    .top-nav a::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 0;
+        height: 1.5px; /* SMALLER - was 2px */
+        background: var(--accent);
+        transition: width 0.3s ease;
+    }
+
+    .top-nav a:hover::after {
+        width: 100%;
+    }
+
+    /* ================= HERO SECTION - FULL SCREEN ================= */
+    .hero {
+        height: 100vh;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+        position: relative;
+        z-index: 5;
+        width: 100%;
+        overflow: hidden;
+    }
+
+    .hero-container {
+        width: 100%;
+        max-width: 1400px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0 80px;
+        margin: 0 auto;
+    }
+
+    /* HERO CONTENT - CENTERED */
+    .hero-content {
+        flex: 1;
+        max-width: 1200px;
+        text-align: center;
+        padding-top: 40px; /* SMALLER - was 60px */
+    }
+
+    .hero-inner {
+        opacity: 0;
+        transform: translateY(50px);
+        transition: 1.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    .hero-inner.show {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .accent-text {
+        color: var(--accent);
+        position: relative;
+        display: inline-block;
+    }
+
+    .accent-text::after {
+        content: '';
+        position: absolute;
+        bottom: 2px;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background: var(--accent);
+        opacity: 0.5;
+    }
+
+    /* BIG HERO TEXT */
+    .hero h1 {
+        font-family: 'Orbitron', sans-serif;
+        font-size: 70px; /* BIGGER TEXT */
+        font-weight: 600;
+        margin-bottom: 30px; /* SMALLER - was 35px */
+        line-height: 1.1;
+        letter-spacing: -0.5px;
+        white-space: pre-line;
+    }
+
+    /* "Secure" word in blue color */
+    .hero h1 .secure-word {
+        color: var(--accent);
+        text-shadow: 0 0 10px rgba(95, 179, 217, 0.5);
+        position: relative;
+    }
+
+    .hero h1 .secure-word::after {
+        content: '';
+        position: absolute;
+        bottom: 2px;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background: var(--accent);
+        opacity: 0.5;
+    }
+
+    .hero p {
+        font-size: 22px; /* BIGGER TEXT */
+        line-height: 1.8;
+        color: var(--muted);
+        margin-bottom: 50px; /* SMALLER - was 60px */
+        max-width: 900px;
+        margin-left: auto;
+        margin-right: auto;
+        white-space: pre-line;
+    }
+
+    /* "Cyber Security" in blue color in paragraph */
+    .hero p .cyber-security {
+        color: var(--accent);
+        font-weight: 500;
+        text-shadow: 0 0 5px rgba(95, 179, 217, 0.3);
+    }
+
+    /* BIG HERO BUTTONS */
+    .hero-buttons {
+        display: flex;
+        gap: 20px; /* SMALLER - was 25px */
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .btn-primary {
+        padding: 18px 45px; /* SMALLER - was 20px 50px */
+        border: 2px solid var(--accent);
+        color: var(--accent);
+        text-decoration: none;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        font-size: 13px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        z-index: 1;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px; /* SMALLER - was 12px */
+    }
+
+    .btn-primary::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: var(--accent);
+        transition: left 0.4s ease;
+        z-index: -1;
+    }
+
+    .btn-primary:hover::before {
+        left: 0;
+    }
+
+    .btn-primary:hover {
+        color: var(--bg);
+    }
+
+    .btn-secondary {
+        padding: 18px 45px; /* SMALLER - was 20px 50px */
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        color: rgba(255, 255, 255, 0.9);
+        text-decoration: none;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        font-size: 13px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px; /* SMALLER - was 12px */
+    }
+
+    .btn-secondary:hover {
+        border-color: var(--accent);
+        color: var(--accent);
+        transform: translateY(-3px);
+    }
+
+    .btn-icon {
+        font-size: 15px; /* SMALLER - was 16px */
+    }
+
+    /* SCROLL INDICATOR */
+    .scroll-indicator {
+        position: absolute;
+        bottom: 40px; /* HIGHER - was 50px */
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 100;
+        color: var(--muted);
+        font-size: 12px; /* SMALLER - was 13px */
+        letter-spacing: 1.5px; /* SMALLER - was 2px */
+        text-transform: uppercase;
+        opacity: 0.7;
+        animation: bounce 2s infinite;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px; /* SMALLER - was 10px */
+    }
+
+    .scroll-indicator i {
+        font-size: 22px; /* SMALLER - was 24px */
+    }
+
+    @keyframes bounce {
+        0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+        40% { transform: translateX(-50%) translateY(-8px); } /* SMALLER - was -10px */
+        60% { transform: translateX(-50%) translateY(-4px); } /* SMALLER - was -5px */
+    }
+
+    /* ================= SECTIONS ================= */
+    section {
+        padding: 140px 120px; /* SMALLER - was 150px */
+        position: relative;
+        z-index: 5;
+        max-width: 1400px;
+        margin: 0 auto;
+        border-top: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .reveal {
+        opacity: 0;
+        transform: translateY(60px);
+        transition: 1s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    .reveal.show {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .title {
+        font-family: 'Orbitron', sans-serif;
+        font-size: 42px;
+        margin-bottom: 45px; /* SMALLER - was 50px */
+        letter-spacing: 0.3px;
+        position: relative;
+        display: inline-block;
+    }
+
+    .title::after {
+        content: '';
+        position: absolute;
+        bottom: -10px; /* SMALLER - was -12px */
+        left: 0;
+        width: 50px;
+        height: 2px;
+        background: var(--accent);
+    }
+
+    .block {
+        max-width: 900px;
+        font-size: 18px;
+        line-height: 1.9;
+        color: var(--muted);
+    }
+
+    /* ================= FEATURES ================= */
+    .features {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(240px, 1fr));
+        gap: 30px; /* SMALLER - was 35px */
+        margin-top: 70px; /* SMALLER - was 80px */
+    }
+
+    .card {
+        padding: 45px 30px; /* SMALLER - was 50px 35px */
+        border-left: 2px solid rgba(95, 179, 217, 0.35);
+        background: var(--card-bg);
+        backdrop-filter: blur(16px);
+        border-radius: 0 8px 8px 0;
+        transition: all 0.4s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 2px;
+        height: 0;
+        background: var(--accent);
+        transition: height 0.4s ease;
+    }
+
+    .card:hover::before {
+        height: 100%;
+    }
+
+    .card:hover {
+        transform: translateY(-8px); /* SMALLER - was -10px */
+        border-left-color: var(--accent);
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2); /* SMALLER - was 15px 35px */
+    }
+
+    /* ================= WHY CHOOSE ================= */
+    .why-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 30px; /* SMALLER - was 35px */
+        margin-top: 70px; /* SMALLER - was 80px */
+    }
+
+    .why-card {
+        padding: 50px 30px; /* SMALLER - was 60px 35px */
+        background: var(--card-bg);
+        backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        border-radius: 8px;
+        transition: all 0.4s ease;
+        position: relative;
+        text-align: center;
+    }
+
+    .why-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: var(--accent);
+        transform: scaleX(0);
+        transition: transform 0.4s ease;
+    }
+
+    .why-card:hover::before {
+        transform: scaleX(1);
+    }
+
+    .why-card:hover {
+        transform: translateY(-10px); /* SMALLER - was -12px */
+        border-color: rgba(95, 179, 217, 0.35);
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2); /* SMALLER - was 15px 35px */
+    }
+
+    .why-icon {
+        font-size: 26px; /* SMALLER - was 28px */
+        color: var(--accent);
+        margin-bottom: 20px; /* SMALLER - was 22px */
+    }
+
+    /* ================= CTA ================= */
+    .cta {
+        text-align: center;
+        padding: 140px 120px; /* SMALLER - was 150px */
+        position: relative;
+        overflow: hidden;
+    }
+
+    .cta::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 700px;
+        height: 700px;
+        background: radial-gradient(circle, rgba(95, 179, 217, 0.1) 0%, transparent 70%);
+        z-index: -1;
+    }
+
+    .cta h2 {
+        font-family: 'Orbitron', sans-serif;
+        font-size: 44px; /* SMALLER - was 46px */
+        margin-bottom: 35px; /* SMALLER - was 40px */
+        line-height: 1.2;
+    }
+
+    .cta a {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px; /* SMALLER - was 10px */
+        padding: 18px 50px; /* SMALLER - was 20px 55px */
+        border: 1.5px solid var(--accent);
+        color: var(--accent);
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        font-size: 12px;
+        font-weight: 600;
+        position: relative;
+        overflow: hidden;
+        z-index: 1;
+    }
+
+    .cta a::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: var(--accent);
+        transition: left 0.4s ease;
+        z-index: -1;
+    }
+
+    .cta a:hover::before {
+        left: 0;
+    }
+
+    .cta a:hover {
+        color: var(--bg);
+    }
+
+    /* ================= FOOTER ================= */
+    footer {
+        padding: 100px; /* SMALLER - was 120px */
+        text-align: center;
+        opacity: 0.45;
+        font-size: 14px;
+        letter-spacing: 0.4px;
+        border-top: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    /* ================= SCROLL TO TOP ================= */
+    .scroll-to-top {
+        position: fixed;
+        bottom: 20px; /* SMALLER - was 25px */
+        right: 20px; /* SMALLER - was 25px */
+        width: 45px; /* SMALLER - was 50px */
+        height: 45px; /* SMALLER - was 50px */
+        background: var(--accent);
+        color: var(--bg);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px; /* SMALLER - was 18px */
+        cursor: pointer;
+        z-index: 1000;
+        box-shadow: 0 4px 12px rgba(95, 179, 217, 0.3); /* SMALLER - was 0 4px 15px */
+        transition: all 0.3s ease;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(20px);
+    }
+
+    .scroll-to-top.visible {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+    }
+
+    .scroll-to-top:hover {
+        background: var(--accent-light);
+        transform: translateY(-3px); /* SMALLER - was -4px */
+        box-shadow: 0 6px 16px rgba(95, 179, 217, 0.4); /* SMALLER - was 0 8px 20px */
+    }
+
+    /* ================= RESPONSIVE ================= */
+    @media (max-width: 1200px) {
+        section {
+            padding: 120px 80px;
+        }
+        
+        .hero h1 {
+            font-size: 60px;
+        }
+        
+        .hero p {
+            font-size: 20px;
+        }
+        
+        .cta {
+            padding: 120px 80px;
+        }
+        
+        .hero-container {
+            padding: 0 60px;
+        }
+        
+        .big-logo {
+            width: 80px;
+            height: 80px;
+        }
+        
+        .top-left-container.scrolled .big-logo {
+            width: 45px;
+            height: 45px;
+        }
+        
+        .company-name {
+            font-size: 20px;
+        }
+        
+        .top-left-container.scrolled .company-name {
+            font-size: 16px;
+        }
+    }
+
+    @media (max-width: 992px) {
+        .features, .why-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+        }
+        
+        .title {
+            font-size: 38px;
+        }
+        
+        .top-nav {
+            right: 25px;
+            top: 25px;
+            padding: 8px 16px;
+        }
+        
+        .top-nav.scrolled {
+            top: 18px;
+            right: 20px;
+        }
+        
+        .top-left-container {
+            left: 25px;
+            top: 25px;
+        }
+        
+        .top-left-container.scrolled {
+            left: 20px;
+            top: 18px;
+        }
+        
+        .cta h2 {
+            font-size: 40px;
+        }
+        
+        .scroll-to-top {
+            bottom: 18px;
+            right: 18px;
+            width: 40px;
+            height: 40px;
+            font-size: 15px;
+        }
+        
+        .hero h1 {
+            font-size: 50px;
+        }
+        
+        .hero p {
+            font-size: 19px;
+        }
+        
+        .big-logo {
+            width: 70px;
+            height: 70px;
+        }
+        
+        .top-left-container.scrolled .big-logo {
+            width: 40px;
+            height: 40px;
+        }
+        
+        .company-name {
+            font-size: 18px;
+        }
+        
+        .top-left-container.scrolled .company-name {
+            font-size: 15px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        section {
+            padding: 100px 40px;
+        }
+        
+        .hero h1 {
+            font-size: 42px;
+        }
+        
+        .hero p {
+            font-size: 18px;
+        }
+        
+        .features, .why-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .hero-buttons {
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .btn-primary, .btn-secondary {
+            width: 100%;
+            max-width: 320px;
+        }
+        
+        footer {
+            padding: 80px 40px;
+        }
+        
+        .cta {
+            padding: 100px 40px;
+        }
+        
+        .cta h2 {
+            font-size: 36px;
+        }
+        
+        .scroll-to-top {
+            bottom: 15px;
+            right: 15px;
+            width: 38px;
+            height: 38px;
+            font-size: 14px;
+        }
+        
+        .top-nav {
+            display: none;
+        }
+        
+        .hero-container {
+            padding: 0 30px;
+        }
+        
+        .scroll-indicator {
+            bottom: 35px;
+            font-size: 11px;
+        }
+        
+        .big-logo {
+            width: 60px;
+            height: 60px;
+        }
+        
+        .top-left-container.scrolled .big-logo {
+            width: 35px;
+            height: 35px;
+        }
+        
+        .company-name {
+            font-size: 16px;
+        }
+        
+        .top-left-container.scrolled .company-name {
+            font-size: 14px;
+        }
+        
+        .top-left-container {
+            flex-direction: row;
+            gap: 8px;
+            align-items: center;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .top-left-container {
+            left: 15px;
+            top: 20px;
+        }
+        
+        .top-left-container.scrolled {
+            left: 12px;
+            top: 15px;
+        }
+        
+        .big-logo {
+            width: 50px;
+            height: 50px;
+        }
+        
+        .top-left-container.scrolled .big-logo {
+            width: 30px;
+            height: 30px;
+        }
+        
+        .hero h1 {
+            font-size: 36px;
+        }
+        
+        .title {
+            font-size: 34px;
+        }
+        
+        section {
+            padding: 80px 25px;
+        }
+        
+        .hero h1 {
+            font-size: 32px;
+            white-space: normal;
+        }
+        
+        .hero p {
+            font-size: 17px;
+            white-space: normal;
+        }
+        
+        .hero-container {
+            padding: 0 20px;
+        }
+        
+        .scroll-indicator {
+            bottom: 25px;
+        }
+        
+        .company-name {
+            font-size: 14px;
+        }
+        
+        .top-left-container.scrolled .company-name {
+            font-size: 12px;
+        }
+        
+        .top-left-container {
+            flex-direction: row;
+            gap: 6px;
+        }
+    }
+    </style>
+</head>
+<body>
+    <!-- BACKGROUND -->
+    <canvas id="three-bg"></canvas>
+    <div id="overlay"></div>
+
+    <!-- NAV -->
+    <!-- TOP-LEFT: COMPANY NAME WITH LOGO - NOW SMALLER -->
+    <div class="top-left-container" id="topLeftContainer">
+        <div class="company-name">HYTAYN</div>
+        <div class="big-logo">
+            <img src="images/hero.png" alt="HYTAYN Logo" onerror="this.style.display='none'">
+        </div>
+    </div>
+
+    <!-- NAVIGATION - RIGHT SIDE -->
+    <nav class="top-nav" id="topNav">
+        <a href="/Hytayn/frontend/index.html" class="active">Home</a>
+        <a href="/Hytayn/frontend/service.html">Services</a>
+        <a href="/Hytayn/frontend/project.html">Projects</a>
+        <a href="/Hytayn/frontend/team.html">Team</a>
+        <a href="/Hytayn/frontend/contact.html">Contact</a>
+    </nav>
+
+    <!-- SCROLL TO TOP BUTTON -->
+    <div class="scroll-to-top" id="scrollToTop">
+        <i class="fas fa-home"></i>
+    </div>
+
+    <!-- HERO SECTION - FULL SCREEN -->
+    <div class="hero">
+        <div class="hero-container">
+            <!-- CENTERED CONTENT -->
+            <div class="hero-content">
+                <div class="hero-inner">
+                    <h1>Engineering <span class="secure-word">Secure</span>,  
+Scalable Digital Systems  
+for the Future</h1>
+                    <p>HYTAYN designs Web Applications, <span class="cyber-security">Cyber Security</span>, and Intelligent  
+Engineering Platforms for high-risk and mission-critical  
+environments. We build resilient architectures that stand the test of  
+time.</p>
+
+                    <div class="hero-buttons">
+                        <a href="contact.html" class="btn-primary">
+                            <i class="fas fa-rocket btn-icon"></i>
+                            Start a Project
+                        </a>
+                        <a href="project.html" class="btn-secondary">
+                            <i class="fas fa-eye btn-icon"></i>
+                            View Our Work
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- SCROLL INDICATOR -->
+        <div class="scroll-indicator">
+            <i class="fas fa-chevron-down"></i>
+            <span>Scroll to explore</span>
+        </div>
+    </div>
+
+    <!-- WHO WE ARE -->
+    <section>
+        <h2 class="title reveal">Who We Are</h2>
+        <div class="block reveal">
+            HYTAYN is a cyber security and advanced engineering studio focused on building
+            resilient, secure, and future-ready digital systems. Our team of expert engineers
+            and security specialists brings decades of combined experience in protecting
+            critical infrastructure and sensitive data.
+            <br><br>
+            We work with founders, enterprises, and organizations that value long-term
+            architecture, deep technical ownership, and reliability at scale. Our approach
+            combines cutting-edge technology with time-tested security principles.
+        </div>
+    </section>
+
+    <!-- WHAT WE BUILD -->
+    <section>
+        <h2 class="title reveal">What We Build</h2>
+        <div class="features">
+            <div class="card reveal">
+                <h3>Enterprise Cyber Security Platforms</h3>
+                <p>Complete security ecosystems for large-scale organizations</p>
+            </div>
+            <div class="card reveal">
+                <h3>SOC & SIEM Engineering Systems</h3>
+                <p>Security operations centers and threat detection platforms</p>
+            </div>
+            <div class="card reveal">
+                <h3>Web Applications</h3>
+                <p>Secure, scalable web platforms with modern architectures</p>
+            </div>
+            <div class="card reveal">
+                <h3>AI & Machine Learning Tools</h3>
+                <p>Intelligent systems for threat detection and automation</p>
+            </div>
+            <div class="card reveal">
+                <h3>Security Testing & Audits</h3>
+                <p>Comprehensive web, network, and system security assessments</p>
+            </div>
+            <div class="card reveal">
+                <h3>Cloud Security Architecture</h3>
+                <p>Secure cloud infrastructure design and implementation</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- WHY CHOOSE -->
+    <section>
+        <h2 class="title reveal">Why Choose HYTAYN</h2>
+        <div class="why-grid">
+            <div class="why-card reveal">
+                <div class="why-icon">
+                    <i class="fas fa-chess-board"></i>
+                </div>
+                <h3>Architecture-First Engineering</h3>
+                <p>Long-term system thinking with security built into the foundation of every project we undertake.</p>
+            </div>
+            <div class="why-card reveal">
+                <div class="why-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <h3>Deep Security Expertise</h3>
+                <p>Comprehensive cyber security knowledge across offensive and defensive domains.</p>
+            </div>
+            <div class="why-card reveal">
+                <div class="why-icon">
+                    <i class="fas fa-bullseye"></i>
+                </div>
+                <h3>Selective Engagement</h3>
+                <p>We focus exclusively on serious, high-impact engineering problems with meaningful outcomes.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta">
+        <h2 class="reveal">Let's Build Something Secure</h2>
+        <p class="reveal" style="max-width: 650px; margin: 0 auto 45px; font-size: 18px; color: var(--muted);">
+            Ready to engineer a more secure future? Let's discuss your project and how we can help protect what matters most.
+        </p>
+        <a href="contact.html" class="reveal">
+            <i class="fas fa-comment-dots"></i>
+            Start a Conversation
+        </a>
+    </section>
+
+    <footer>
+        © 2026 HYTAYN. All rights reserved. | Security Through Engineering
+    </footer>
+
+    <script>
+    // Scroll reveal and header shrink
+    const reveals = document.querySelectorAll('.reveal');
+    const heroInner = document.querySelector('.hero-inner');
+    const scrollToTopBtn = document.getElementById('scrollToTop');
+    const topLeftContainer = document.getElementById('topLeftContainer');
+    const topNav = document.getElementById('topNav');
+
+    window.addEventListener('load', () => {
+        heroInner.classList.add('show');
+        
+        // Stagger reveal for hero elements
+        setTimeout(() => {
+            document.querySelectorAll('.hero h1, .hero p, .hero-buttons').forEach((el, index) => {
+                setTimeout(() => {
+                    el.style.opacity = '1';
+                    el.style.transform = 'translateY(0)';
+                }, index * 150);
+            });
+        }, 200);
+    });
+
+    window.addEventListener('scroll', () => {
+        reveals.forEach(el => {
+            if (el.getBoundingClientRect().top < window.innerHeight - 120) {
+                el.classList.add('show');
+            }
+        });
+        
+        // Hide scroll indicator when scrolling
+        const scrollIndicator = document.querySelector('.scroll-indicator');
+        if (window.scrollY > 100) {
+            scrollIndicator.style.opacity = '0';
+            scrollIndicator.style.visibility = 'hidden';
+        } else {
+            scrollIndicator.style.opacity = '0.7';
+            scrollIndicator.style.visibility = 'visible';
+        }
+        
+        // Show/hide scroll to top button
+        if (window.scrollY > 500) {
+            scrollToTopBtn.classList.add('visible');
+        } else {
+            scrollToTopBtn.classList.remove('visible');
+        }
+        
+        // Shrink header when scrolling
+        if (window.scrollY > 50) {
+            topLeftContainer.classList.add('scrolled');
+            topNav.classList.add('scrolled');
+        } else {
+            topLeftContainer.classList.remove('scrolled');
+            topNav.classList.remove('scrolled');
+        }
+    });
+
+    // Scroll to top functionality
+    scrollToTopBtn.addEventListener('click', () => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+    </script>
+
+    <!-- 3D BACKGROUND -->
+    <script>
+    const canvas = document.getElementById("three-bg");
+    const scene = new THREE.Scene();
+
+    const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 1800);
+    camera.position.z = 360;
+
+    const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+    // Enhanced particle system
+    const nodes = [];
+    const NODE_COUNT = 350;
+    const nodeGroup = new THREE.Group();
+    scene.add(nodeGroup);
+
+    // Create nodes with different sizes
+    for (let i = 0; i < NODE_COUNT; i++) {
+        const size = Math.random() * 1.8 + 0.6;
+        const node = new THREE.Mesh(
+            new THREE.SphereGeometry(size, 10, 10),
+            new THREE.MeshBasicMaterial({ 
+                color: 0x5fb3d9,
+                transparent: true,
+                opacity: 0.6
+            })
+        );
+        
+        node.position.set(
+            (Math.random() - 0.5) * 600,
+            (Math.random() - 0.5) * 400,
+            (Math.random() - 0.5) * 600
+        );
+        
+        // Add subtle animation properties
+        node.userData = {
+            speed: Math.random() * 0.002 + 0.001,
+            amplitude: Math.random() * 0.4 + 0.2,
+            originalY: node.position.y
+        };
+        
+        nodes.push(node);
+        nodeGroup.add(node);
+    }
+
+    // Create connecting lines with gradient effect
+    const lineMaterial = new THREE.LineBasicMaterial({
+        color: 0x5fb3d9,
+        transparent: true,
+        opacity: 0.12
+    });
+
+    const lines = [];
+    for (let i = 0; i < nodes.length; i++) {
+        for (let j = i + 1; j < nodes.length; j++) {
+            if (nodes[i].position.distanceTo(nodes[j].position) < 100) {
+                const geometry = new THREE.BufferGeometry().setFromPoints([
+                    nodes[i].position,
+                    nodes[j].position
+                ]);
+                
+                const line = new THREE.Line(geometry, lineMaterial);
+                lines.push(line);
+                scene.add(line);
+            }
+        }
+    }
+
+    // Add some larger "core" nodes
+    const coreNodes = [];
+    for (let i = 0; i < 6; i++) {
+        const coreNode = new THREE.Mesh(
+            new THREE.SphereGeometry(2.5, 14, 14),
+            new THREE.MeshBasicMaterial({ 
+                color: 0x5fb3d9,
+                transparent: true,
+                opacity: 0.8
+            })
+        );
+        
+        coreNode.position.set(
+            (Math.random() - 0.5) * 350,
+            (Math.random() - 0.5) * 250,
+            (Math.random() - 0.5) * 350
+        );
+        
+        coreNode.userData = {
+            speed: Math.random() * 0.001 + 0.0005,
+            amplitude: Math.random() * 0.25 + 0.15,
+            originalY: coreNode.position.y
+        };
+        
+        coreNodes.push(coreNode);
+        scene.add(coreNode);
+    }
+
+    // Mouse interaction
+    let mouseX = 0;
+    let mouseY = 0;
+    let targetRotationX = 0;
+    let targetRotationY = 0;
+
+    document.addEventListener("mousemove", (e) => {
+        mouseX = (e.clientX / window.innerWidth - 0.5) * 1.5;
+        mouseY = (e.clientY / window.innerHeight - 0.5) * 1.5;
+    });
+
+    // Animation loop
+    const clock = new THREE.Clock();
+
+    function animate() {
+        requestAnimationFrame(animate);
+        
+        const elapsedTime = clock.getElapsedTime();
+        
+        // Smooth mouse rotation
+        targetRotationX += (mouseY * 0.0008 - targetRotationX) * 0.04;
+        targetRotationY += (mouseX * 0.0008 - targetRotationY) * 0.04;
+        
+        // Apply rotation to the entire node group
+        nodeGroup.rotation.x = elapsedTime * 0.04 + targetRotationX;
+        nodeGroup.rotation.y = elapsedTime * 0.025 + targetRotationY;
+        
+        // Animate individual nodes
+        nodes.forEach(node => {
+            node.position.y = node.userData.originalY + Math.sin(elapsedTime * node.userData.speed) * node.userData.amplitude * 8;
+            node.rotation.x = elapsedTime * node.userData.speed * 0.8;
+            node.rotation.y = elapsedTime * node.userData.speed * 0.5;
+        });
+        
+        // Animate core nodes
+        coreNodes.forEach(node => {
+            node.position.y = node.userData.originalY + Math.sin(elapsedTime * node.userData.speed * 1.5) * node.userData.amplitude * 12;
+            node.rotation.x = elapsedTime * node.userData.speed * 0.4;
+            node.rotation.y = elapsedTime * node.userData.speed * 0.2;
+            
+            // Pulsing effect
+            const scale = 1 + Math.sin(elapsedTime * node.userData.speed * 2.5) * 0.08;
+            node.scale.set(scale, scale, scale);
+        });
+        
+        renderer.render(scene, camera);
+    }
+
+    animate();
+
+    // Handle resize
+    window.addEventListener("resize", () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+    </script>
+</body>
+</html>
