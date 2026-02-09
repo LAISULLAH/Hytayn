@@ -9,11 +9,11 @@ const {
 const { sendMail } = require("../controllers/sendMail.controller");
 
 // GET /api/team
-router.get("/", getAllTeam);
+router.get("/Hytayn/", getAllTeam);
 
 // POST /api/team
-router.post("/", createTeam);
-router.post("/send-mail", sendMail);
+router.post("/Hytayn/", createTeam);
+router.post("/Hytayn/send-mail", sendMail);
 
 
 module.exports = router;

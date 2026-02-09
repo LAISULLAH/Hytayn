@@ -7,9 +7,9 @@ const {
 } = require("../controllers/skill.controller");
 
 // GET /api/skills
-router.get("/", getSkills);
+router.get("/Hytayn/", getSkills);
 
 // POST /api/skills
-router.post("/", addSkill);
+router.post("/Hytayn/", addSkill);
 
 module.exports = router;

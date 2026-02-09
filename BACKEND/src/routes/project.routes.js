@@ -6,7 +6,7 @@ const {
   createProject,
 } = require("../controllers/project.controller");
 
-router.get("/", getAllProjects);
-router.post("/", createProject);
+router.get("/Hytayn/", getAllProjects);
+router.post("/Hytayn/", createProject);
 
 module.exports = router;

@@ -6,7 +6,7 @@ const {
   addExperience,
 } = require("../controllers/experience.controller");
 
-router.get("/", getExperience);
-router.post("/", addExperience);
+router.get("/Hytayn/", getExperience);
+router.post("/Hytayn/", addExperience);
 
 module.exports = router;
