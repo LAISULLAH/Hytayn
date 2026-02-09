@@ -15,14 +15,14 @@ app.use(helmet());
 app.use(express.json());
 
 // TEST ROUTE (IMPORTANT)
-app.get("/Hytayn/test", (req, res) => {
+app.get("/Hytayn/BACKEND/test", (req, res) => {
   res.json({ message: "Backend connected successfully " });
 });
 
 // routes
-app.use("/Hytayn/api/team", teamRoutes);
-app.use("/Hytayn/api/projects", projectRoutes);
-app.use("/Hytayn/api/experience", experienceRoutes);
-app.use("/Hytayn/api/skills", skillRoutes);
+app.use("/Hytayn/BACKEND/api/team", teamRoutes);
+app.use("/Hytayn/BACKEND/api/projects", projectRoutes);
+app.use("/Hytayn/BACKEND/api/experience", experienceRoutes);
+app.use("/Hytayn/BACKEND/api/skills", skillRoutes);
 
 module.exports = app;
