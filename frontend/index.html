@@ -903,6 +903,89 @@
             gap: 6px;
         }
     }
+
+    /* ================= MOBILE NAV FIX ================= */
+
+/* Disable clicks on background */
+#three-bg,
+#overlay {
+    pointer-events: none;
+}
+
+/* Hamburger Button */
+.mobile-menu-btn {
+    position: fixed;
+    top: 26px;
+    right: 20px;
+    width: 30px;
+    height: 22px;
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    z-index: 20000;
+    cursor: pointer;
+    pointer-events: auto;
+}
+
+.mobile-menu-btn span {
+    height: 2px;
+    width: 100%;
+    background: var(--accent);
+    box-shadow: 0 0 8px var(--accent-glow);
+    transition: all 0.35s ease;
+}
+
+/* Fullscreen Mobile Menu */
+.mobile-nav {
+    position: fixed;
+    inset: 0;
+    background: rgba(2, 6, 23, 0.97);
+    backdrop-filter: blur(22px);
+    z-index: 15000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 28px;
+    transform: translateY(-100%);
+    transition: transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.mobile-nav a {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 18px;
+    letter-spacing: 2px;
+    text-decoration: none;
+    color: white;
+}
+
+/* Active State */
+.mobile-nav.active {
+    transform: translateY(0);
+}
+
+/* Hamburger → X Animation */
+.mobile-menu-btn.active span:nth-child(1) {
+    transform: translateY(10px) rotate(45deg);
+}
+.mobile-menu-btn.active span:nth-child(2) {
+    opacity: 0;
+}
+.mobile-menu-btn.active span:nth-child(3) {
+    transform: translateY(-10px) rotate(-45deg);
+}
+
+/* Show on Mobile */
+@media (max-width: 768px) {
+    .top-nav {
+        display: none;
+    }
+
+    .mobile-menu-btn {
+        display: flex;
+    }
+}
+
     </style>
 </head>
 <body>
@@ -927,6 +1010,23 @@
         <a href="/Hytayn/frontend/team.html">Team</a>
         <a href="/Hytayn/frontend/contact.html">Contact</a>
     </nav>
+
+    <!-- MOBILE MENU BUTTON -->
+    <div class="mobile-menu-btn" id="mobileMenuBtn">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+    
+    <!-- MOBILE NAV -->
+    <div class="mobile-nav" id="mobileNav">
+        <a href="/Hytayn/frontend/index.html">Home</a>
+        <a href="/Hytayn/frontend/service.html">Services</a>
+        <a href="/Hytayn/frontend/project.html">Projects</a>
+        <a href="/Hytayn/frontend/team.html">Team</a>
+        <a href="/Hytayn/frontend/contact.html">Contact</a>
+    </div>
+
 
     <!-- SCROLL TO TOP BUTTON -->
     <div class="scroll-to-top" id="scrollToTop">
@@ -1048,7 +1148,7 @@ time.</p>
         <p class="reveal" style="max-width: 650px; margin: 0 auto 45px; font-size: 18px; color: var(--muted);">
             Ready to engineer a more secure future? Let's discuss your project and how we can help protect what matters most.
         </p>
-        <a href="/frontend/contact.html" class="reveal">
+        <a href="/Hytayn/frontend/contact.html" class="reveal">
             <i class="fas fa-comment-dots"></i>
             Start a Conversation
         </a>
@@ -1277,6 +1377,23 @@ time.</p>
         camera.updateProjectionMatrix();
         renderer.setSize(window.innerWidth, window.innerHeight);
     });
+
+    
+    
+const mobileMenuBtn = document.getElementById("mobileMenuBtn");
+const mobileNav = document.getElementById("mobileNav");
+
+mobileMenuBtn.addEventListener("click", () => {
+    mobileNav.classList.toggle("active");
+});
+
+// Close menu when clicking link
+document.querySelectorAll(".mobile-nav a").forEach(link => {
+    link.addEventListener("click", () => {
+        mobileNav.classList.remove("active");
+    });
+});
+
     </script>
 </body>
 </html>
