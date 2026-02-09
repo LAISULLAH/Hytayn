@@ -1,0 +1,1279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HYTAYN — Our Engineering Team</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Orbitron:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+<style>
+:root {
+  --bg: #020617;
+  --bg-dark: #010813;
+  --accent: #38bdf8;
+  --accent-glow: rgba(56, 189, 248, 0.4);
+  --text: #e5e7eb;
+  --text-light: rgba(229, 231, 235, 0.95);
+  --muted: rgba(255, 255, 255, 0.7);
+  --card-bg: rgba(17, 24, 39, 0.6);
+  --border: rgba(255, 255, 255, 0.1);
+  --gradient: linear-gradient(135deg, #38bdf8, #7dd3fc, #0ea5e9);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+
+/* ================= ENHANCED 3D BACKGROUND ================= */
+#three-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -20;
+  pointer-events: none;
+}
+
+#overlay {
+  position: fixed;
+  inset: 0;
+  z-index: -10;
+  background: 
+    radial-gradient(circle at 20% 30%, rgba(56, 189, 248, .15) 0%, transparent 40%),
+    radial-gradient(circle at 80% 70%, rgba(56, 189, 248, .1) 0%, transparent 40%),
+    radial-gradient(circle at 50% 20%, rgba(56, 189, 248, .2), transparent 55%),
+    linear-gradient(to bottom, rgba(2, 6, 23, 0.4), rgba(2, 6, 23, 0.98) 70%);
+}
+
+/* ================= ADVANCED NAV ================= */
+.advanced-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 20px 70px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 9999;
+  background: rgba(2, 6, 23, 0.85);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+}
+
+/* LOGO SECTION - SIMPLE AND CLEAN */
+.logo-container {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.company-name {
+  font-family: 'Orbitron', sans-serif;
+  letter-spacing: 3px;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--accent);
+  text-shadow: 0 0 15px rgba(56, 189, 248, 0.5);
+}
+
+.logo {
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: 
+    drop-shadow(0 0 10px rgba(56, 189, 248, 0.6))
+    brightness(1.2);
+  transition: all 0.4s ease;
+}
+
+.logo:hover img {
+  transform: scale(1.05);
+  filter: 
+    drop-shadow(0 0 20px rgba(56, 189, 248, 0.8))
+    brightness(1.3);
+}
+
+.nav-menu {
+  display: flex;
+  gap: 36px;
+}
+
+.nav-menu a {
+  font-size: 12px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: none;
+  position: relative;
+  transition: all 0.3s ease;
+  padding: 8px 0;
+  font-weight: 500;
+}
+
+.nav-menu a::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent), #7dd3fc);
+  transition: width 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.nav-menu a:hover::before,
+.nav-menu a.active::before {
+  width: 100%;
+}
+
+.nav-menu a:hover,
+.nav-menu a.active {
+  color: var(--accent);
+}
+
+/* ================= ENHANCED HEADER ================= */
+.enhanced-header {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 200px 40px 120px;
+  position: relative;
+  z-index: 5;
+}
+
+.header-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.header-content {
+  opacity: 0;
+  transform: translateY(60px);
+  animation: heroReveal 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards 0.3s;
+}
+
+@keyframes heroReveal {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.header-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 72px;
+  font-weight: 800;
+  margin-bottom: 30px;
+  background: var(--gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradientShift 8s ease infinite;
+  background-size: 200% 200%;
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.header-subtitle {
+  font-size: 22px;
+  line-height: 1.8;
+  color: var(--muted);
+  max-width: 900px;
+  margin: 0 auto 50px;
+  font-weight: 400;
+}
+
+/* ================= ENHANCED TEAM SECTION ================= */
+.team-section {
+  padding: 180px 160px;
+  position: relative;
+  z-index: 5;
+}
+
+.enhanced-member {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 1fr;
+  align-items: center;
+  gap: 100px;
+  margin-bottom: 200px;
+  opacity: 0;
+  transform: translateY(80px);
+  transition: all 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.enhanced-member.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* LEFT SECTION ENHANCED */
+.member-left h2 {
+  font-size: 52px;
+  margin-bottom: 20px;
+  color: var(--text-light);
+  font-weight: 800;
+}
+
+.member-role {
+  color: var(--accent);
+  letter-spacing: 4px;
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-bottom: 40px;
+  display: inline-block;
+  position: relative;
+  padding-left: 20px;
+}
+
+.member-role::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 10px;
+  height: 10px;
+  background: var(--accent);
+  border-radius: 50%;
+  transform: translateY(-50%);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: translateY(-50%) scale(1); opacity: 0.8; }
+  50% { transform: translateY(-50%) scale(1.3); opacity: 0.4; }
+  100% { transform: translateY(-50%) scale(1); opacity: 0.8; }
+}
+
+.member-left p {
+  font-size: 20px;
+  line-height: 1.9;
+  color: var(--muted);
+  max-width: 600px;
+  margin-bottom: 60px;
+}
+
+.enhanced-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  padding: 22px 60px;
+  border: 2px solid var(--accent);
+  color: var(--accent);
+  text-decoration: none;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  font-size: 14px;
+  font-weight: 700;
+  transition: all 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+  border-radius: 50px;
+}
+
+.enhanced-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: var(--gradient);
+  transition: left 0.6s ease;
+  z-index: -1;
+}
+
+.enhanced-btn:hover::before {
+  left: 0;
+}
+
+.enhanced-btn:hover {
+  color: var(--bg);
+  transform: translateY(-8px) scale(1.05);
+  box-shadow: 0 30px 60px rgba(56, 189, 248, 0.3);
+}
+
+.enhanced-btn i {
+  font-size: 18px;
+}
+
+/* CENTER IMAGE ENHANCED */
+.member-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  perspective: 1600px;
+}
+
+.member-image {
+  width: 400px;
+  height: 580px;
+  object-fit: cover;
+  border-radius: 30px;
+  box-shadow:
+    0 60px 160px rgba(0, 0, 0, 0.95),
+    0 0 120px rgba(56, 189, 248, 0.6);
+  transition: all 1s cubic-bezier(0.2, 0.8, 0.2, 1);
+  position: relative;
+  filter: brightness(1.05) contrast(1.1);
+}
+
+.member-image::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(to bottom, transparent, rgba(56, 189, 248, 0.15));
+  border-radius: 30px;
+  pointer-events: none;
+}
+
+.member-image:hover {
+  transform: rotateY(-18deg) rotateX(10deg) scale(1.08);
+  box-shadow:
+    0 80px 240px rgba(0, 0, 0, 1),
+    0 0 200px rgba(56, 189, 248, 0.9);
+}
+
+/* RIGHT SECTION ENHANCED */
+.member-right .expertise-label {
+  font-size: 14px;
+  letter-spacing: 4px;
+  color: var(--accent);
+  margin-bottom: 25px;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.member-right h3 {
+  font-size: 32px;
+  margin-bottom: 30px;
+  color: var(--text-light);
+  font-weight: 700;
+}
+
+.member-right p {
+  font-size: 18px;
+  line-height: 1.9;
+  color: var(--muted);
+  margin-bottom: 50px;
+  max-width: 500px;
+}
+
+.enhanced-icons {
+  display: flex;
+  gap: 30px;
+}
+
+.enhanced-icon {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  border: 2px solid rgba(56, 189, 248, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent);
+  font-size: 28px;
+  transition: all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+  background: rgba(56, 189, 248, 0.08);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.enhanced-icon::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(56, 189, 248, 0.2), transparent);
+  transition: left 0.6s ease;
+}
+
+.enhanced-icon:hover::before {
+  left: 100%;
+}
+
+.enhanced-icon:hover {
+  transform: rotate(360deg) scale(1.2);
+  box-shadow: 0 0 120px rgba(56, 189, 248, 0.9);
+  background: rgba(56, 189, 248, 0.2);
+  border-color: var(--accent);
+}
+
+/* ================= ENHANCED TEAM STATS ================= */
+.enhanced-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 50px;
+  margin: 200px 0 150px;
+  text-align: center;
+}
+
+.enhanced-stat-item {
+  padding: 70px 40px;
+  border: 1px solid rgba(56, 189, 248, 0.15);
+  border-radius: 24px;
+  background: linear-gradient(1deg, rgba(17, 24, 39, 0.7), rgba(2, 6, 23, 0.9));
+  backdrop-filter: blur(20px);
+  transition: all 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.enhanced-stat-item::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: var(--gradient);
+  border-radius: 26px;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.enhanced-stat-item:hover::before {
+  opacity: 0.3;
+}
+
+.enhanced-stat-item:hover {
+  transform: translateY(-20px) scale(1.05);
+  border-color: rgba(56, 189, 248, 0.4);
+  box-shadow: 0 40px 80px rgba(0, 0, 0, 0.3);
+}
+
+.enhanced-stat-number {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 64px;
+  font-weight: 800;
+  color: var(--accent);
+  margin-bottom: 15px;
+  background: var(--gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.enhanced-stat-label {
+  font-size: 16px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+/* ================= ENHANCED JOIN TEAM CTA ================= */
+.enhanced-join-team {
+  text-align: center;
+  padding: 180px 160px;
+  position: relative;
+  overflow: hidden;
+  border-radius: 40px;
+  margin: 100px 0;
+  background: linear-gradient(145deg, rgba(17, 24, 39, 0.8), rgba(2, 6, 23, 0.95));
+  border: 1px solid rgba(56, 189, 248, 0.2);
+}
+
+.enhanced-join-team::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 1000px;
+  height: 1000px;
+  background: radial-gradient(circle, rgba(56, 189, 248, 0.15) 0%, transparent 70%);
+  z-index: -1;
+}
+
+.enhanced-join-team h2 {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 56px;
+  margin-bottom: 40px;
+  line-height: 1.2;
+  color: var(--text-light);
+}
+
+.enhanced-join-team p {
+  max-width: 800px;
+  margin: 0 auto 70px;
+  font-size: 20px;
+  color: var(--muted);
+  line-height: 1.9;
+}
+
+/* ================= ENHANCED FOOTER ================= */
+.enhanced-footer {
+  padding: 120px 160px;
+  text-align: center;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  position: relative;
+}
+
+.footer-content {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.footer-logo {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--accent);
+  margin-bottom: 30px;
+  letter-spacing: 8px;
+}
+
+.footer-text {
+  font-size: 16px;
+  color: var(--muted);
+  line-height: 1.8;
+  margin-bottom: 40px;
+  opacity: 0.8;
+}
+
+.footer-copyright {
+  font-size: 14px;
+  color: var(--muted);
+  opacity: 0.6;
+  letter-spacing: 1px;
+}
+
+/* ================= RESPONSIVE ================= */
+@media (max-width: 1400px) {
+  .team-section, .enhanced-join-team {
+    padding: 120px 80px;
+  }
+  
+  .enhanced-member {
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+  }
+  
+  .enhanced-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 1200px) {
+  .header-title {
+    font-size: 56px;
+  }
+  
+  .advanced-nav {
+    padding: 20px 40px;
+  }
+  
+  .enhanced-join-team h2 {
+    font-size: 44px;
+  }
+  
+  .company-name {
+    font-size: 20px;
+  }
+  
+  .logo {
+    width: 50px;
+    height: 50px;
+  }
+}
+
+@media (max-width: 992px) {
+  .team-section, .enhanced-join-team {
+    padding: 100px 40px;
+  }
+  
+  .header-title {
+    font-size: 44px;
+  }
+  
+  .enhanced-member {
+    grid-template-columns: 1fr;
+    text-align: center;
+    gap: 80px;
+  }
+  
+  .member-left p {
+    margin: 0 auto 60px;
+  }
+  
+  .member-right p {
+    margin: 0 auto 50px;
+  }
+  
+  .enhanced-icons {
+    justify-content: center;
+  }
+  
+  .nav-menu {
+    display: none;
+  }
+  
+  .enhanced-footer {
+    padding: 80px 40px;
+  }
+}
+
+@media (max-width: 768px) {
+  .enhanced-header {
+    padding: 180px 20px 80px;
+    min-height: 90vh;
+  }
+  
+  .header-title {
+    font-size: 36px;
+  }
+  
+  .header-subtitle {
+    font-size: 18px;
+  }
+  
+  .member-left h2 {
+    font-size: 42px;
+  }
+  
+  .member-image {
+    width: 320px;
+    height: 480px;
+  }
+  
+  .enhanced-stats {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+  
+  .enhanced-join-team {
+    padding: 80px 30px;
+  }
+  
+  .enhanced-join-team h2 {
+    font-size: 32px;
+  }
+  
+  .logo-container {
+    gap: 10px;
+  }
+  
+  .logo {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .company-name {
+    font-size: 18px;
+    letter-spacing: 2px;
+  }
+}
+
+@media (max-width: 480px) {
+  .member-image {
+    width: 280px;
+    height: 420px;
+  }
+  
+  .enhanced-icons {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .enhanced-icon {
+    width: 60px;
+    height: 60px;
+    font-size: 24px;
+  }
+}
+
+/* ================= ANIMATIONS ================= */
+.reveal {
+  opacity: 0;
+  transform: translateY(60px);
+  transition: all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.reveal.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.delay-1 { transition-delay: 0.1s; }
+.delay-2 { transition-delay: 0.2s; }
+.delay-3 { transition-delay: 0.3s; }
+.delay-4 { transition-delay: 0.4s; }
+.delay-5 { transition-delay: 0.5s; }
+</style>
+</head>
+
+<body>
+
+<!-- ENHANCED 3D BACKGROUND -->
+<canvas id="three-bg"></canvas>
+<div id="overlay"></div>
+
+<!-- ADVANCED NAV -->
+<nav class="advanced-nav">
+  <div class="logo-container">
+    <div class="logo">
+      <img src="images/hero.png" alt="HYTAYN Logo" onerror="this.style.display='none'">
+    </div>
+    <div class="company-name">HYTAYN</div>
+  </div>
+  <div class="nav-menu">
+    <a href="/index.html">Home</a>
+    <a href="/service.html">Services</a>
+    <a href="/project.html">Projects</a>
+    <a href="/team.html" class="active">Team</a>
+    <a href="/contact.html">Contact</a>
+  </div>
+</nav>
+
+<!-- ENHANCED HEADER -->
+<div class="enhanced-header">
+  <div class="header-container">
+    <div class="header-content">
+      <h1 class="header-title">Meet Our Engineering Team</h1>
+      <p class="header-subtitle">
+        HYTAYN is built by senior engineers who design secure, scalable,
+        and intelligent systems for high-risk and mission-critical environments.
+        Our team combines deep technical expertise with practical security experience.
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- TEAM SECTION -->
+<div class="team-section">
+
+  <!-- MEMBER 1 - Azan/Ayaan -->
+  <div class="enhanced-member">
+    <div class="member-left">
+      <h2>Azaan Mansuri</h2>
+      <div class="member-role">Cyber Security Engineer</div>
+      <p>
+        Leads cyber security engineering at HYTAYN across offensive and defensive domains.
+        Specializes in building enterprise-grade security platforms and threat detection systems.
+        With 2 years of experience in security architecture and penetration testing.
+      </p>
+      <a href="/project.html#security" class="enhanced-btn">
+        <i class="fas fa-shield-alt"></i>
+        View Security Portfolio
+      </a>
+    </div>
+    <div class="member-center">
+      <img src="images/azan.jpg" alt="Azan Mansuri - Cyber Security Engineer" class="member-image">
+    </div>
+    <div class="member-right">
+      <div class="expertise-label">Core Expertise</div>
+      <h3>Security Architecture & Defense</h3>
+      <p>Expert in designing secure, resilient system architectures and defense mechanisms. Skilled at identifying threats, mitigating risks, and implementing layered security controls. Focused on reliability, efficiency, and real-world protection.</p>
+      <div class="enhanced-icons">
+        <div class="enhanced-icon" title="Security Architecture">
+          <i class="fas fa-shield-alt"></i>
+        </div>
+        <div class="enhanced-icon" title="Penetration Testing">
+          <i class="fas fa-search"></i>
+        </div>
+        <div class="enhanced-icon" title="Threat Intelligence">
+          <i class="fas fa-brain"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MEMBER 2 - Ayan/Azaan -->
+  <div class="enhanced-member">
+    <div class="member-left">
+      <h2>Ayaan Mansuri</h2>
+      <div class="member-role">AI Specialist & Web Developer</div>
+      <p>
+        Passionate developer building modern web applications while exploring AI technologies. 
+        Currently learning and applying cloud-native development, distributed systems fundamentals, 
+        and machine learning concepts. Focused on creating practical, user-friendly applications.
+      </p>
+      <a href="/project.html#ai" class="enhanced-btn">
+        <i class="fas fa-robot"></i>
+        Explore AI Projects
+      </a>
+    </div>
+    <div class="member-center">
+      <img src="images/ayan.jpg" alt="Ayaan Mansuri - AI Specialist & Web Developer" class="member-image">
+    </div>
+    <div class="member-right">
+      <div class="expertise-label">Core Expertise</div>
+      <h3> AI Specialist & Web Developer</h3>
+      <p>Expert in building intelligent, data-driven systems and modern web applications. Skilled at integrating AI models with scalable, secure, and high-performance web architectures. Focused on clean design, efficiency, and real-world impact..</p>
+      <div class="enhanced-icons">
+        <div class="enhanced-icon" title="Web Development">
+          <i class="fas fa-code"></i>
+        </div>
+        <div class="enhanced-icon" title="AI Exploration">
+          <i class="fas fa-robot"></i>
+        </div>
+        <div class="enhanced-icon" title="Creative Solutions">
+          <i class="fas fa-lightbulb"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MEMBER 3 - Laisullah -->
+  <div class="enhanced-member">
+    <div class="member-left">
+      <h2>Laisullah Bloch</h2>
+      <div class="member-role">AI & Full Stack Security Engineer</div>
+      <p>
+        A versatile engineer passionate at the intersection of Artificial Intelligence, Cyber Security, and Full Stack Development. Specializes in building secure, intelligent, and high-performance web applications and scalable systems.
+      </p>
+      <a href="/project.html#web" class="enhanced-btn">
+        <i class="fas fa-sitemap"></i>
+        Web Development & Security
+      </a>
+    </div>
+    <div class="member-center">
+      <img src="/images/Laisullah.jpg" alt="Laisullah Bloch - AI & Full Stack Security Engineer" class="member-image">
+    </div>
+    <div class="member-right">
+      <div class="expertise-label">Core Expertise</div>
+      <h3>Full Stack, AI & Security</h3>
+      <p>End-to-end web application development, applied AI/ML integration, secure-by-design architecture, penetration testing, vulnerability assessment, and building automated, scalable cloud-native systems.</p>
+      <div class="enhanced-icons">
+        <div class="enhanced-icon" title="Artificial Intelligence">
+          <i class="fas fa-brain"></i>
+        </div>
+        <div class="enhanced-icon" title="Cyber Security">
+          <i class="fas fa-shield-alt"></i>
+        </div>
+        <div class="enhanced-icon" title="Full Stack Development">
+          <i class="fas fa-code"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ENHANCED TEAM STATS -->
+<div class="team-section">
+  <div class="enhanced-stats">
+    <div class="enhanced-stat-item reveal delay-1">
+      <div class="enhanced-stat-number" data-count="2">0+</div>
+      <div class="enhanced-stat-label">Years Combined Experience</div>
+    </div>
+    <div class="enhanced-stat-item reveal delay-2">
+      <div class="enhanced-stat-number" data-count="50">0+</div>
+      <div class="enhanced-stat-label">Projects Delivered</div>
+    </div>
+    <div class="enhanced-stat-item reveal delay-3">
+      <div class="enhanced-stat-number" data-count="100">0%</div>
+      <div class="enhanced-stat-label">Client Satisfaction</div>
+    </div>
+    <div class="enhanced-stat-item reveal delay-4">
+      <div class="enhanced-stat-number" data-count="24">0/7</div>
+      <div class="enhanced-stat-label">Security Monitoring</div>
+    </div>
+  </div>
+</div>
+
+<!-- ENHANCED JOIN TEAM CTA -->
+<div class="enhanced-join-team">
+  <h2 class="reveal">Join Our Engineering Team</h2>
+  <p class="reveal delay-1">
+    We're always looking for talented engineers who share our passion for building
+    secure, scalable systems. If you're interested in solving complex technical
+    challenges with a team that values excellence, we'd love to hear from you.
+  </p>
+  <a href="contact.html" class="enhanced-btn reveal delay-2">
+    <i class="fas fa-user-plus"></i>
+    Explore Career Opportunities
+  </a>
+</div>
+
+<footer class="enhanced-footer">
+  <div class="footer-content">
+    <div class="footer-logo">HYTAYN</div>
+    <p class="footer-text">
+      Advanced Security Engineering & AI Systems<br>
+      Building the future of secure, intelligent infrastructure
+    </p>
+    <p class="footer-copyright">
+      © 2026 HYTAYN. All rights reserved. | Security Through Advanced Engineering
+    </p>
+  </div>
+</footer>
+
+<!-- ================= ENHANCED SCRIPTS ================= -->
+<script>
+// Navigation scroll effect
+window.addEventListener('scroll', () => {
+  const nav = document.querySelector('.advanced-nav');
+  if (window.scrollY > 100) {
+    nav.style.background = 'rgba(2, 6, 23, 0.95)';
+    nav.style.backdropFilter = 'blur(20px)';
+  } else {
+    nav.style.background = 'rgba(2, 6, 23, 0.85)';
+    nav.style.backdropFilter = 'blur(20px)';
+  }
+});
+
+// Scroll reveal for members
+const members = document.querySelectorAll(".enhanced-member");
+const reveals = document.querySelectorAll(".reveal");
+
+function revealElements() {
+  members.forEach(m => {
+    if (m.getBoundingClientRect().top < innerHeight - 150) {
+      m.classList.add("show");
+    }
+  });
+  
+  reveals.forEach(el => {
+    if (el.getBoundingClientRect().top < innerHeight - 140) {
+      el.classList.add("show");
+    }
+  });
+  
+  animateStats();
+}
+
+window.addEventListener("scroll", revealElements);
+window.addEventListener("load", revealElements);
+
+// Animated stats counter
+function animateStats() {
+  const statNumbers = document.querySelectorAll('.enhanced-stat-number');
+  
+  statNumbers.forEach(stat => {
+    const target = parseInt(stat.dataset.count);
+    const current = parseInt(stat.textContent.replace(/[^0-9]/g, ''));
+    
+    if (stat.getBoundingClientRect().top < window.innerHeight - 100 && current < target) {
+      let start = 0;
+      const duration = 2000;
+      const increment = target / (duration / 16);
+      
+      const timer = setInterval(() => {
+        start += increment;
+        if (start >= target) {
+          stat.textContent = stat.dataset.count + (stat.textContent.includes('%') ? '%' : 
+                          stat.textContent.includes('/') ? '/7' : '+');
+          clearInterval(timer);
+        } else {
+          stat.textContent = Math.floor(start) + (stat.textContent.includes('%') ? '%' : 
+                          stat.textContent.includes('/') ? '/7' : '+');
+        }
+      }, 16);
+      
+      stat.dataset.animated = 'true';
+    }
+  });
+}
+
+// Image hover effect enhancement
+const images = document.querySelectorAll('.member-image');
+images.forEach(img => {
+  img.addEventListener('mouseenter', () => {
+    img.style.transform = 'rotateY(-18deg) rotateX(10deg) scale(1.08)';
+  });
+  
+  img.addEventListener('mouseleave', () => {
+    img.style.transform = 'rotateY(0) rotateX(0) scale(1)';
+  });
+});
+
+// Icon hover effects
+const enhancedIcons = document.querySelectorAll('.enhanced-icon');
+enhancedIcons.forEach(icon => {
+  icon.addEventListener('mouseenter', () => {
+    icon.style.transform = 'rotate(360deg) scale(1.2)';
+  });
+  
+  icon.addEventListener('mouseleave', () => {
+    icon.style.transform = 'rotate(0) scale(1)';
+  });
+});
+
+// Logo hover effect
+const logoIcon = document.querySelector('.logo i');
+if (logoIcon) {
+  logoIcon.addEventListener('mouseenter', () => {
+    logoIcon.style.transform = 'scale(1.1) rotate(-10deg)';
+    logoIcon.style.filter = 'drop-shadow(0 0 15px rgba(56, 189, 248, 0.8))';
+  });
+  
+  logoIcon.addEventListener('mouseleave', () => {
+    logoIcon.style.transform = 'scale(1) rotate(0)';
+    logoIcon.style.filter = 'drop-shadow(0 0 10px rgba(56, 189, 248, 0.6))';
+  });
+}
+</script>
+
+<!-- ================= ENHANCED 3D BACKGROUND ================= -->
+<script>
+const canvas = document.getElementById("three-bg");
+const scene = new THREE.Scene();
+
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 2000);
+camera.position.z = 500;
+
+const renderer = new THREE.WebGLRenderer({ 
+  canvas, 
+  alpha: true, 
+  antialias: true,
+  powerPreference: "high-performance"
+});
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+// Enhanced particle system
+const particleCount = 600;
+const particles = new THREE.BufferGeometry();
+const positions = new Float32Array(particleCount * 3);
+const colors = new Float32Array(particleCount * 3);
+
+for (let i = 0; i < particleCount; i++) {
+  const i3 = i * 3;
+  
+  // Position in a larger sphere
+  positions[i3] = (Math.random() - 0.5) * 1800;
+  positions[i3 + 1] = (Math.random() - 0.5) * 1200;
+  positions[i3 + 2] = (Math.random() - 0.5) * 1800;
+  
+  // Color - gradient blue tones
+  colors[i3] = 0.22 + Math.random() * 0.3; // R
+  colors[i3 + 1] = 0.74 + Math.random() * 0.2; // G
+  colors[i3 + 2] = 0.97 + Math.random() * 0.03; // B
+}
+
+particles.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+particles.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+const particleMaterial = new THREE.PointsMaterial({
+  size: 4,
+  vertexColors: true,
+  transparent: true,
+  opacity: 0.7,
+  blending: THREE.AdditiveBlending
+});
+
+const particleSystem = new THREE.Points(particles, particleMaterial);
+scene.add(particleSystem);
+
+// Create central cluster
+const centralGeometry = new THREE.IcosahedronGeometry(25, 2);
+const centralMaterial = new THREE.MeshBasicMaterial({
+  color: 0x38bdf8,
+  transparent: true,
+  opacity: 0.2,
+  wireframe: true
+});
+const centralCluster = new THREE.Mesh(centralGeometry, centralMaterial);
+scene.add(centralCluster);
+
+// Create orbital rings
+const rings = [];
+for (let i = 0; i < 4; i++) {
+  const ringGeometry = new THREE.RingGeometry(80 + i * 100, 85 + i * 100, 64);
+  const ringMaterial = new THREE.MeshBasicMaterial({
+    color: 0x38bdf8,
+    transparent: true,
+    opacity: 0.1,
+    side: THREE.DoubleSide
+  });
+  const ring = new THREE.Mesh(ringGeometry, ringMaterial);
+  ring.rotation.x = Math.PI / 2;
+  ring.rotation.z = i * Math.PI / 8;
+  rings.push(ring);
+  scene.add(ring);
+}
+
+// Add strategic nodes
+const strategicNodes = [];
+const nodeCount = 12;
+for (let i = 0; i < nodeCount; i++) {
+  const geometry = new THREE.SphereGeometry(6, 16, 16);
+  const material = new THREE.MeshBasicMaterial({
+    color: 0x38bdf8,
+    transparent: true,
+    opacity: 0.8
+  });
+  
+  const node = new THREE.Mesh(geometry, material);
+  
+  // Position in spherical coordinates
+  const radius = 300 + Math.random() * 200;
+  const theta = Math.random() * Math.PI * 2;
+  const phi = Math.acos(2 * Math.random() - 1);
+  
+  node.position.x = radius * Math.sin(phi) * Math.cos(theta);
+  node.position.y = radius * Math.sin(phi) * Math.sin(theta);
+  node.position.z = radius * Math.cos(phi);
+  
+  node.userData = {
+    radius: radius,
+    theta: theta,
+    phi: phi,
+    speed: 0.001 + Math.random() * 0.002
+  };
+  
+  strategicNodes.push(node);
+  scene.add(node);
+}
+
+// Connect nodes with lines
+const lineMaterial = new THREE.LineBasicMaterial({
+  color: 0x38bdf8,
+  transparent: true,
+  opacity: 0.1,
+  linewidth: 1
+});
+
+// Connect strategic nodes to center
+strategicNodes.forEach(node => {
+  const geometry = new THREE.BufferGeometry().setFromPoints([
+    new THREE.Vector3(0, 0, 0),
+    node.position
+  ]);
+  const line = new THREE.Line(geometry, lineMaterial);
+  scene.add(line);
+});
+
+// Connect some strategic nodes to each other
+for (let i = 0; i < strategicNodes.length; i++) {
+  for (let j = i + 1; j < strategicNodes.length; j++) {
+    if (Math.random() > 0.7) { // 30% chance of connection
+      const distance = strategicNodes[i].position.distanceTo(strategicNodes[j].position);
+      if (distance < 500) {
+        const geometry = new THREE.BufferGeometry().setFromPoints([
+          strategicNodes[i].position,
+          strategicNodes[j].position
+        ]);
+        const line = new THREE.Line(geometry, lineMaterial);
+        scene.add(line);
+      }
+    }
+  }
+}
+
+// Mouse interaction
+let mouseX = 0;
+let mouseY = 0;
+let targetRotationX = 0;
+let targetRotationY = 0;
+
+document.addEventListener("mousemove", (e) => {
+  mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
+  mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
+});
+
+// Animation
+const clock = new THREE.Clock();
+
+function animate() {
+  requestAnimationFrame(animate);
+  
+  const elapsedTime = clock.getElapsedTime();
+  
+  // Smooth mouse rotation
+  targetRotationX += (mouseY * 0.0003 - targetRotationX) * 0.05;
+  targetRotationY += (mouseX * 0.0003 - targetRotationY) * 0.05;
+  
+  // Apply rotation to entire scene
+  scene.rotation.x = elapsedTime * 0.02 + targetRotationX;
+  scene.rotation.y = elapsedTime * 0.03 + targetRotationY;
+  
+  // Animate central cluster
+  centralCluster.rotation.x = elapsedTime * 0.05;
+  centralCluster.rotation.y = elapsedTime * 0.07;
+  centralCluster.scale.setScalar(1 + Math.sin(elapsedTime * 0.3) * 0.1);
+  
+  // Animate rings
+  rings.forEach((ring, i) => {
+    ring.rotation.y = elapsedTime * (0.01 + i * 0.005);
+  });
+  
+  // Animate strategic nodes
+  strategicNodes.forEach(node => {
+    node.userData.theta += node.userData.speed;
+    
+    node.position.x = node.userData.radius * Math.sin(node.userData.phi) * Math.cos(node.userData.theta);
+    node.position.y = node.userData.radius * Math.sin(node.userData.phi) * Math.sin(node.userData.theta);
+    node.position.z = node.userData.radius * Math.cos(node.userData.phi);
+    
+    // Gentle pulsing
+    const pulse = 1 + Math.sin(elapsedTime * 1.5 + node.userData.theta) * 0.15;
+    node.scale.setScalar(pulse);
+  });
+  
+  // Animate particles
+  const positions = particleSystem.geometry.attributes.position.array;
+  for (let i = 0; i < particleCount; i++) {
+    const i3 = i * 3;
+    // Gentle floating motion
+    positions[i3 + 1] += Math.sin(elapsedTime * 0.3 + i * 0.01) * 0.3;
+  }
+  particleSystem.geometry.attributes.position.needsUpdate = true;
+  
+  renderer.render(scene, camera);
+}
+
+animate();
+
+// Handle resize
+window.addEventListener("resize", () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
+</script>
+
+<script>
+  window.onload = function () {
+    if (window.location.hash === "#web") {
+      const btn = document.querySelector('[data-filter="web"]');
+      if (btn) btn.click();
+    }
+  };
+</script>
+
+</body>
+</html>

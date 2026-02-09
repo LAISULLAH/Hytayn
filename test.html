@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Frontend → Backend Test</title>
+</head>
+<body>
+
+<h1>Frontend Backend Connection Test</h1>
+<button onclick="callBackend()">Call Backend</button>
+<p id="result"></p>
+
+<script>
+function callBackend() {
+  fetch("http://localhost:5000/test")
+    .then(res => res.json())
+    .then(data => {
+      document.getElementById("result").innerText = data.message;
+    })
+    .catch(err => {
+      document.getElementById("result").innerText = "Error connecting backend";
+      console.error(err);
+    });
+}
+</script>
+
+</body>
+</html>
