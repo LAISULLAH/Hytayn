@@ -490,7 +490,7 @@ section {
   font-size: 18px;
 }
 
-.copy-email-btn {
+.copy-email-btn, .copy-phone-btn {
   background: transparent;
   border: 1px solid var(--accent);
   color: var(--accent);
@@ -502,7 +502,7 @@ section {
   margin-left: 10px;
 }
 
-.copy-email-btn:hover {
+.copy-email-btn:hover, .copy-phone-btn:hover {
   background: rgba(56, 189, 248, 0.1);
   transform: translateY(-2px);
 }
@@ -1363,6 +1363,15 @@ footer {
         <strong>Ahmedabad, India</strong>
       </div>
       <div class="meta">
+        <span>Phone Number</span>
+        <strong>
+          +91 9054030828
+          <button class="copy-phone-btn" id="copyPhoneBtn" title="Copy phone number to clipboard">
+            <i class="far fa-copy"></i> Copy
+          </button>
+        </strong>
+      </div>
+      <div class="meta">
         <span>Our Email</span>
         <strong>
           contact.hytayn@gmail.com
@@ -1377,7 +1386,7 @@ footer {
       </div>
       <div class="meta">
         <span>Working Hours</span>
-        <strong>Mon-Fri, 9AM-6PM IST</strong>
+        <strong>Monday-Monday, 24/7</strong>
       </div>
     </div>
 
@@ -1716,6 +1725,7 @@ function initCopyEmail() {
       await navigator.clipboard.writeText(email);
       
       // Show notification
+      notification.textContent = 'Email copied to clipboard!';
       notification.classList.add('show');
       
       // Hide notification after 3 seconds
@@ -1733,6 +1743,45 @@ function initCopyEmail() {
       document.body.removeChild(textArea);
       
       notification.textContent = 'Email copied to clipboard!';
+      notification.classList.add('show');
+      
+      setTimeout(() => {
+        notification.classList.remove('show');
+      }, 3000);
+    }
+  });
+}
+
+// Copy Phone Functionality
+function initCopyPhone() {
+  const copyPhoneBtn = document.getElementById('copyPhoneBtn');
+  const notification = document.getElementById('copyNotification');
+  
+  copyPhoneBtn.addEventListener('click', async () => {
+    const phone = '+91 9054030828';
+    
+    try {
+      await navigator.clipboard.writeText(phone);
+      
+      // Show notification with phone message
+      notification.textContent = 'Phone number copied to clipboard!';
+      notification.classList.add('show');
+      
+      // Hide notification after 3 seconds
+      setTimeout(() => {
+        notification.classList.remove('show');
+      }, 3000);
+    } catch (err) {
+      console.error('Failed to copy phone: ', err);
+      // Fallback for older browsers
+      const textArea = document.createElement('textarea');
+      textArea.value = phone;
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textArea);
+      
+      notification.textContent = 'Phone number copied to clipboard!';
       notification.classList.add('show');
       
       setTimeout(() => {
@@ -1805,6 +1854,9 @@ window.addEventListener('load', () => {
   
   // Initialize copy email functionality
   initCopyEmail();
+  
+  // Initialize copy phone functionality
+  initCopyPhone();
 });
 
 // Scroll reveal animations
